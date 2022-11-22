@@ -1,6 +1,6 @@
 import csv
 from operator import index
-reader = csv.reader(    open("TestData2.csv"), delimiter=";")
+reader = csv.reader(    open(".\\VisualData_V0.0\\TestData2.csv"), delimiter=";")
 data=[]
 xValues=[]
 yValues=[]
