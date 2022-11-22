@@ -32,4 +32,4 @@ class Plotter3D():
 
         plt.title(self.plt_title)
 
-        plt.show() 
+        plt.draw() 

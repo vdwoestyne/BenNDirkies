@@ -4,7 +4,7 @@
 },
 "Measurement":{
     "sampleLength":10,
-    "maxDeviation":0.1
+    "maxDeviation":0.15
 },
 "Data":{
     "AmbientRange":[-20.0,60.0],

@@ -17,7 +17,7 @@ def execute():
                                         xyz_values=[raw_data[setup_dict["Raw Data"]["Column Headers"][1]],
                                                     raw_data[setup_dict["Raw Data"]["Column Headers"][2]],
                                                     raw_data[setup_dict["Raw Data"]["Column Headers"][3]]
-                                                    ])
+                                                    ]).plot()
     datahandler.DataHandler(raw_data=raw_data, 
                             class_setup_dict=setup_dict["Measurement"]
                             ).handleData()

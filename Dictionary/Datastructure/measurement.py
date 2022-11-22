@@ -3,8 +3,8 @@ from dataclasses import dataclass
 # Gebruik van een dataclass omdat dit het concept van een "Datapunt" zal vergemakkelijken. 
 @dataclass
 class Measurement():
-    maxDeviation: float             # I.e. 10% deviation in one meseurement
     firstSample: float              # First sample of the candidate
+    maxDeviation: float             # I.e. 10% deviation in one meseurement
     sampleCounter: int = 1          # amount of samples in candidate measuremt
     sampleLength: int = 0              # I.e. 10 samples in one meseurement
 
