@@ -14,7 +14,7 @@ class DataHandler():
             actualSample = record[3]
             actualAmbient = record[1]
             actualCapacity = record[2]
-            actualPower = actualCapacity/actualSample
+            actualPower = actualCapacity/actualSample//COP Ref_Dirk
 
             if new_meas:
                 meas = measurement.Measurement( firstSample=actualSample,
