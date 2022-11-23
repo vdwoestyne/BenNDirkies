@@ -68,9 +68,7 @@ class DataHandler(ClassTemplate):
             if meas.sampleCounter >= meas.sampleLength:
                 self.measurements.append(meas)
                 new_meas = True
-                
-
+              
     def convertMeasToDataframe(self):
         variables = list(self.measurements[0].__annotations__.keys())
         return pd.DataFrame([[getattr(i,j) for j in variables] for i in self.measurements], columns = variables)
-        
