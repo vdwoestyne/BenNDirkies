@@ -4,9 +4,10 @@ from dataclasses import dataclass
 @dataclass
 class Measurement():
     firstSample: float              # First sample of the candidate
+    firstTimeStamp: float           # First time stamp
     maxDeviation: float             # I.e. 10% deviation in one meseurement
     sampleCounter: int = 1          # amount of samples in candidate measuremt
-    sampleLength: int = 0              # I.e. 10 samples in one meseurement
+    sampleLength: int = 0           # I.e. 10 samples in one meseurement
 
     averageSample: float = 0.0      # Average of samples in candidate
     totalSample: float = 0.0        # Sum of all samples in candidate

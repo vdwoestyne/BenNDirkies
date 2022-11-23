@@ -1,23 +1,27 @@
+from .classtemplate import ClassTemplate
 from .Datastructure import measurement
+import pandas as pd
 
-class DataHandler():
+class DataHandler(ClassTemplate):
     def __init__(self, raw_data, class_setup_dict) -> None:
+        super().__init__(class_setup_dict)
+
         self.raw_data = raw_data
-        self.setup_dict = class_setup_dict
         self.measurements = []
+        
         pass
 
     def handleData(self):
         new_meas = True
         for i in range(1, self.raw_data.shape[0]):
             record = self.raw_data.values[i]
-            actualSample = record[3]
-            actualAmbient = record[1]
-            actualCapacity = record[2]
+            [actualTimeStamp, actualAmbient, actualCapacity, actualSample] = record
+
             actualPower = actualCapacity/actualSample
 
             if new_meas:
                 meas = measurement.Measurement( firstSample=actualSample,
+                                                firstTimeStamp=actualTimeStamp,
                                                 maxDeviation=self.setup_dict["maxDeviation"],
                                                 sampleLength=self.setup_dict["sampleLength"],
                                                 averageSample=actualSample,
@@ -66,8 +70,7 @@ class DataHandler():
                 new_meas = True
                 
 
-        print(self.measurements)
-        print(len(self.measurements))
-        pass
-
-    
+    def convertMeasToDataframe(self):
+        variables = list(self.measurements[0].__annotations__.keys())
+        return pd.DataFrame([[getattr(i,j) for j in variables] for i in self.measurements], columns = variables)
+        

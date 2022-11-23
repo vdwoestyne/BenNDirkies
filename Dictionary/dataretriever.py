@@ -1,12 +1,13 @@
+from .classtemplate import ClassTemplate
 import pandas as pd
 
 
-class DataRetriever():
+class DataRetriever(ClassTemplate):
     def __init__(self, file_location, delimiter, class_setup_dict) -> None:
+        super().__init__(class_setup_dict)
         self.file = file_location
         self.delimiter = delimiter
         self.df = pd.read_csv(self.file, delimiter=self.delimiter)
-        self.setup_dict = class_setup_dict
 
         self.cleanData()
 
