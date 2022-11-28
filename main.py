@@ -1,6 +1,7 @@
 from Dictionary import dataretriever, datahandler, dataplotter, datawarehouse
 from matplotlib.widgets import Slider, RangeSlider, Button
 import matplotlib.pyplot as plt
+import numpy as np
 import json
 
 def execute():
@@ -16,7 +17,19 @@ def execute():
                                         )
     dhandler.handleData()
     meas_df = dhandler.convertMeasToDataframe()
-    print(meas_df)
+    
+    # print(meas_df)
+
+    dwarehouse = datawarehouse.DataStorage( class_setup_dict=setup_dict["Data"], 
+                                            df_meas=meas_df)
+    dwarehouse.initStorage()
+    dwarehouse.populateMeasLandscape()
+
+
+
+
+
+
 
     # print(meas_df)
     # dplot2DIon = dataplotter.Plotter2DIon(  df=meas_df,

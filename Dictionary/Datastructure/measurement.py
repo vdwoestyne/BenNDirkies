@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import numpy as np
 
 # Gebruik van een dataclass omdat dit het concept van een "Datapunt" zal vergemakkelijken. 
 @dataclass
@@ -21,4 +22,13 @@ class Measurement():
     averageAmbient: float = 0.0     # Average of ambient temperature in candidate
     totalAmbient: float = 0.0       # Sum of ambient in candidate
 
+    def __array__(self) -> np.ndarray:
+        return np.array([self.sampleLength, 
+                        self.averageSample, 
+                        self.averagePower, 
+                        self.totalPower, 
+                        self.averageCapacity,
+                        self.totalCapacity,
+                        self.averageAmbient,
+                        self.totalAmbient])
     pass

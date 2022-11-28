@@ -1,6 +1,10 @@
 {"Raw Data":{
     "File type":".csv",
-    "Column Headers":["Timestamp","Ambient", "Capacity", "COP"]
+    "Column Headers":[  "Timestamp",
+                        "Ambient", 
+                        "Capacity", 
+                        "COP"
+                    ]
 },
 "Measurement":{
     "sampleLength":5,
@@ -8,9 +12,9 @@
 },
 "Data":{
     "AmbientRange":[-20.0,60.0],
-    "stepAmbient":1.0,
+    "stepAmbient":0.5,
     "CapacityRange":[0.0,10000.0],
-    "stepCapacity":10.0,
+    "stepCapacity":100.0,
     "COPRange":[0.0,10.0],
     "stepCOP":0.1,
     "maxMeasurements":10
