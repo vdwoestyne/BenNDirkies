@@ -34,6 +34,8 @@ class DataStorage(ClassTemplate):
         self.Measurements_landscape =[]
 
     def populateMeasLandscape(self):
+        # print("capacity bin", len(self.bins_capacity))
+        # print("Tambient bin", len(self.bins_ambient))
         for i in range(0,len(self.bins_capacity)):                # 1001 (0 tot en met 1000 = 1001 indexen) steps for Capacity
             row = []
             for j in range(0,len(self.bins_ambient)):         # 81 steps for Tambient
@@ -47,7 +49,7 @@ class DataStorage(ClassTemplate):
                 
                 df_part = self.df.loc[(self.df['averageAmbient'].between(lbound_ambient,ubound_ambient, inclusive=inclusivity)) & (self.df['averageCapacity'].between(lbound_capacity,ubound_capacity, inclusive=inclusivity))]
                 
-                meas_indexs = np.NAN
+                meas_indexs = ""#np.NAN
                 if not df_part.empty:
                     # print("Temp Range: {} - {} °C; Cap Range: {} - {} kW; Real Value: {} °C & {} kW".format(lbound_ambient, 
                                                                                                             # ubound_ambient, 

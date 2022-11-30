@@ -5,64 +5,95 @@ import numpy as np
 import json
 
 def execute():
+
+    ## Initialize setup Configuratio file.json
+    # Open up setup.json file
     setup_file = open(".\\Dictionary\\setup.json")
+
+    # Extract the setup dictionary from the setup.json with json.load
     setup_dict = json.load(setup_file)
+
+    # Extract raw data from CSV into pandas.Dataframe-format
     raw_data = dataretriever.DataRetriever( file_location=".\\TestData2.csv",
                                         delimiter=";", 
                                         class_setup_dict=setup_dict["Raw Data"]
                                         ).df
     
-    dhandler = datahandler.DataHandler(  raw_data=raw_data, 
-                                            class_setup_dict=setup_dict["Measurement"]
+    # Initialize Datahandler 
+    dhandler = datahandler.DataHandler( raw_data=raw_data, 
+                                        class_setup_dict=setup_dict["Measurement"]
                                         )
+
+    # Activate the data handler
     dhandler.handleData()
+
+    # Retract the pandas.Dataframe with the filtered Measurementpoints
     meas_df = dhandler.convertMeasToDataframe()
     
-    # print(meas_df)
+    # Show pandas.Dataframe of MeasurementPoints
+    print(meas_df.head())
 
+    # Initialize Datawarehouse
     dwarehouse = datawarehouse.DataStorage( class_setup_dict=setup_dict["Data"], 
                                             df_meas=meas_df)
+
+    # Initialize Storage withing Datawarehouse
     dwarehouse.initStorage()
+
+    # Populate Measurement Landscape within Datawarehouse
     dwarehouse.populateMeasLandscape()
 
+    # print(dwarehouse.Measurements_landscape)
 
 
-
-
-
-
-    # print(meas_df)
-    # dplot2DIon = dataplotter.Plotter2DIon(  df=meas_df,
-    #                                         xy_label=["Tambient", "COP"],
-    #                                         class_setup_dict=setup_dict["Data"],
-    #                                         plot_title="COP in functie van Ambient Temperature",
-    #                                         ).plotIon()
-                                            
-    # plot(meas_df, xy_label=["Tambient", "COP"], setup_dict=setup_dict["Data"])
-
-    
-def plot(meas_df, xy_label, setup_dict, plot_title=""):
-    
-    # rng = [1000,1100]
-    # df_part = meas_df.loc[meas_df["averageCapacity"].between(*rng)]
-    # x,y = list(df_part['averageAmbient']), list(df_part["averageSample"])
-
-    # fig, axs = plt.subplots(1,1, figsize=(10,5))
-
-    # axs[0] = 
-
-
-    # plt.scatter(x,y)
-    # plt.title = "COP w.r.t. Tambient for Q in range {}-{} W".format(rng[0], rng[1])
-    # plt.xlabel(xlabel=xy_label[0])
-    # plt.ylabel(ylabel=xy_label[1])
-    # plt.xlim(setup_dict["AmbientRange"][0],setup_dict["AmbientRange"][1])
-    # plt.ylim(setup_dict["COPRange"][0], setup_dict["COPRange"][1])
-    # # plt.legend()
-    # plt.grid()
-    
+    # meas_df.plot(x='averageAmbient', y='averageCapacity', z='averageSample', kind='scatter')
     # plt.show()
-    pass    
+    ## Plot Measurement Landscape of Datawarehouse
+    fig = plt.figure()
+
+    # Subplot1
+    ax1 = fig.add_subplot(projection='3d')
+    ax1.set_xlabel('Tambient [°C]')
+    ax1.set_ylabel('Capacity [W]')
+    ax1.set_zlabel('COP [-]')
+    ax1.set_xlim(setup_dict['Data']['AmbientRange'])
+    ax1.set_ylim(setup_dict['Data']['CapacityRange'])
+    ax1.set_zlim(setup_dict['Data']['COPRange'])
+    
+    x,y,z = [
+            list(meas_df['averageAmbient']),
+            list(meas_df['averageCapacity']),
+            list(meas_df['averageSample'])
+            ]
+    ax1.scatter(x,y,z)
+    plt.show()
+    
+
+    # ax1 = plt.subplot2grid(shape=(2,6), loc=(0,0), colspan=2, projection='3D')
+    # ax1.set(xlabel="Tambient [°C]", ylabel="Capacity [W]", zlabel="Nr. of Meas. [#]")
+
+    #Subplot2
+    # ax2 = plt.subplot2grid((2,6), (0,2), colspan=2)
+    # ax2.set_title = ""
+    # ax2.set(xlabel="", ylabel="")
+
+    # #Subplot3
+    # ax3 = plt.subplot2grid((2,6), (0,4), colspan=2)
+    # ax3.set_title = ""
+    # ax3.set(xlabel="", ylabel="")
+
+    # #Subplot4
+    # ax4 = plt.subplot2grid((2,6), (1,1), colspan=2)
+    # ax4.set_title = ""
+    # ax4.set(xlabel="", ylabel="")
+
+    # #Subplot5
+    # ax5 = plt.subplot2grid((2,6), (1,3), colspan=2)
+    # ax5.set_title = ""
+    # ax5.set(xlabel="", ylabel="")
+
+    plt.title = "test"
+    plt.show()
 
 if __name__ == "__main__":
     execute()

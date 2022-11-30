@@ -12,9 +12,9 @@
 },
 "Data":{
     "AmbientRange":[-20.0,60.0],
-    "stepAmbient":0.5,
+    "stepAmbient":1,
     "CapacityRange":[0.0,10000.0],
-    "stepCapacity":100.0,
+    "stepCapacity":1000.0,
     "COPRange":[0.0,10.0],
     "stepCOP":0.1,
     "maxMeasurements":10
