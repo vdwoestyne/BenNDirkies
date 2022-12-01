@@ -44,41 +44,40 @@ def execute():
     dwarehouse.populateMeasLandscape()
 
     # print(dwarehouse.Measurements_landscape)
-    print(dwarehouse.processCount())
+    print(dwarehouse.process())
 
     # meas_df.plot(x='averageAmbient', y='averageCapacity', z='averageSample', kind='scatter')
     # plt.show()
     ## Plot Measurement Landscape of Datawarehouse
-    # fig = plt.figure()
+    fig = plt.figure()
 
     # Subplot1
-    # ax1 = fig.add_subplot(projection='3d')
-    # ax1.set_xlabel('Tambient [°C]')
-    # ax1.set_ylabel('Capacity [W]')
-    # ax1.set_zlabel('COP [-]')
-    # ax1.set_xlim(setup_dict['Data']['AmbientRange'])
-    # ax1.set_ylim(setup_dict['Data']['CapacityRange'])
-    # ax1.set_zlim(setup_dict['Data']['COPRange'])
+    ax1 = fig.add_subplot(2,3,1,projection='3d')
+    ax1.set_xlabel('Tambient [°C]')
+    ax1.set_ylabel('Capacity [W]')
+    ax1.set_zlabel('COP [-]')
+    ax1.set_xlim(setup_dict['Data']['AmbientRange'])
+    ax1.set_ylim(setup_dict['Data']['CapacityRange'])
+    ax1.set_zlim(setup_dict['Data']['COPRange'])
     
-    # x,y,z = [
-    #         list(meas_df['averageAmbient']),
-    #         list(meas_df['averageCapacity']),
-    #         list(meas_df['averageCOP'])
-    #         ]
-    # ax1.scatter(x,y,z)
-    
-
-    # ax1 = plt.subplot2grid(shape=(2,6), loc=(0,0), colspan=2, projection='3D')
-    # ax1.set(xlabel="Tambient [°C]", ylabel="Capacity [W]", zlabel="Nr. of Meas. [#]")
+    x,y,z = [
+            list(meas_df['averageAmbient']),
+            list(meas_df['averageCapacity']),
+            list(meas_df['averageCOP'])
+            ]
+    ax1.scatter(x,y,z)
 
     #Subplot2
-    # ax2 = fig.add_subplot(projection='3d')
-    # ax2.set_xlabel('Tambient [°C]')
-    # ax2.set_ylabel('Capacity [W]')
-    # ax2.set_zlabel('COP [-]')
-    # ax2.set_xlim(setup_dict['Data']['AmbientRange'])
-    # ax2.set_ylim(setup_dict['Data']['CapacityRange'])
-    # ax2.set_zlim(setup_dict['Data']['COPRange'])
+    ax2 = fig.add_subplot(2,3,2,projection='3d')
+    ax2.set_xlabel('Tambient [°C]')
+    ax2.set_ylabel('Capacity [W]')
+    ax2.set_zlabel('Nr. of Meas. [#]')
+    ax2.set_xlim(setup_dict['Data']['AmbientRange'])
+    ax2.set_ylim(setup_dict['Data']['CapacityRange'])
+    ax2.set_zlim(setup_dict['Data']['COPRange'])
+
+    x,y,z = dwarehouse.process(proc=1)
+    ax2.scatter(x,y,z)
 
     # #Subplot3
     # ax3 = plt.subplot2grid((2,6), (0,4), colspan=2)
@@ -95,8 +94,8 @@ def execute():
     # ax5.set_title = ""
     # ax5.set(xlabel="", ylabel="")
 
-    # plt.title = "test"
-    # plt.show()
+    fig.suptitle("Data Analytics")
+    plt.show()
 
 if __name__ == "__main__":
     execute()

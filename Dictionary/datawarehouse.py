@@ -99,10 +99,12 @@ class DataStorage(ClassTemplate):
 
                     temp=0
                     for c in b:
-                        print("i={}, a={}, j={}, b={}, c={}".format(i,a,j,b,c))
-
+                        # print("i={}, a={}, j={}, b={}, c={}".format(i,a,j,b,c))
                         match proc:
                             case 0:
+                                temp+=1
+                            case 1:
+                                temp+= (temp + self.df['averageCOP'])/2
                                 pass
                             case _:
                                 pass
@@ -110,10 +112,14 @@ class DataStorage(ClassTemplate):
 
 
                     z.append(temp)
-                    
-                    exit()
-                        # z.append(len(meas))
         
+        # print(len(x),x)
+        # print(len(y),y)
+        # print(len(z),z)
+        # print(sum(z))
+        # print(x,y,z)
+        
+        # exit()
         return x,y,z
 
 
