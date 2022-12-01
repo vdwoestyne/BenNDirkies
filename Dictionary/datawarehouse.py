@@ -20,6 +20,7 @@ class DataStorage(ClassTemplate):
         self.bins_COP = None
 
         self.Measurements_landscape = None
+        self.blank_space = ""
 
     def initStorage(self):                                    
         self.bins_ambient = self.createRange(   self.setup_dict["AmbientRange"][0],
@@ -49,7 +50,7 @@ class DataStorage(ClassTemplate):
                 
                 df_part = self.df.loc[(self.df['averageAmbient'].between(lbound_ambient,ubound_ambient, inclusive=inclusivity)) & (self.df['averageCapacity'].between(lbound_capacity,ubound_capacity, inclusive=inclusivity))]
                 
-                meas_indexs = ""#np.NAN
+                meas_indexs = self.blank_space
                 if not df_part.empty:
                     # print("Temp Range: {} - {} °C; Cap Range: {} - {} kW; Real Value: {} °C & {} kW".format(lbound_ambient, 
                                                                                                             # ubound_ambient, 
@@ -83,3 +84,69 @@ class DataStorage(ClassTemplate):
     
     def createRange(self, start, stop, inc=1):
         return list(np.arange(start,stop,inc))  
+
+    def process(self, proc=0):
+        x,y,z=[],[],[]
+        temp=0
+        for i,a in enumerate(self.Measurements_landscape):          #For each capacity
+            for j,b in enumerate(a):                                #For each ambient
+                if not b == self.blank_space:
+                    ubound_ambient = self.minAmbient + (j+1)*self.stepAmbient
+                    ubound_capacity = self.minCapacity + (i+1)*self.stepCapacity
+                    
+                    x.append(ubound_ambient)
+                    y.append(ubound_capacity)
+
+                    temp=0
+                    for c in b:
+                        print("i={}, a={}, j={}, b={}, c={}".format(i,a,j,b,c))
+
+                        match proc:
+                            case 0:
+                                pass
+                            case _:
+                                pass
+                        
+
+
+                    z.append(temp)
+                    
+                    exit()
+                        # z.append(len(meas))
+        
+        return x,y,z
+
+
+    # def processCOP(self):
+    #     temp=0.0
+    #     matrixCOP=[]
+    #     for x in self.Measurements[0]:           #For each ambient
+    #         for y in x:                     #For each capacity
+    #             for z in y:                 #For each measurement in a specific case    
+    #                 temp+=self.Measurements[x][y][z].averageSample
+
+    #             matrixCOP[x][y]=temp/self.Measurements[x][y].length
+
+    # def processPower(self):
+    #     temp=0.0
+    #     for x in self.Measurements[0]:           #For each ambient
+    #         for y in x:                     #For each capacity
+    #             for z in y:                 #For each measurement in a specific case    
+    #                 temp+=self.easurements[x][y][z].averagePower
+    #             matrixPower[x][y]=temp/self.Measurements[x][y].length
+
+    # def processConsumption(self):
+    #     temp=0.0
+    #     for x in self.Measurements[0]:           #For each ambient
+    #         for y in x:                     #For each capacity
+    #             for z in y:                 #For each measurement in a specific case    
+    #                 temp+=self.Measurements[x][y][z].totalPower #Total consumption during sample duration
+    #             matrixConsumption[x][y]=(temp)/(3600.0/sampleDuration) #Total consumption in a specific case (scaled to kWh)
+
+    # def processProduction(self):
+    #     temp=0.0
+    #     for x in self.Measurements[0]:           #For each ambient
+    #         for y in x:                     #For each capacity
+    #             for z in y:                 #For each measurement in a specific case    
+    #                 temp=self.Measurements[x][y][z].totalCapacity #Total consumption during sample duration
+    #             matrixProduction[x][y]=(temp)/(3600.0/sampleDuration) #Total consumption in a specific case (scaled to kWh)

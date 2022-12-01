@@ -15,17 +15,17 @@ class DataHandler(ClassTemplate):
         new_meas = True
         for i in range(1, self.raw_data.shape[0]):
             record = self.raw_data.values[i]
-            [actualTimeStamp, actualAmbient, actualCapacity, actualSample] = record
+            [actualTimeStamp, actualAmbient, actualCapacity, actualCOP] = record
 
-            actualPower = actualCapacity/actualSample
+            actualPower = actualCapacity/actualCOP
 
             if new_meas:
-                meas = measurement.Measurement( firstSample=actualSample,
+                meas = measurement.Measurement( firstSample=actualCOP,
                                                 firstTimeStamp=actualTimeStamp,
                                                 maxDeviation=self.setup_dict["maxDeviation"],
                                                 sampleLength=self.setup_dict["sampleLength"],
-                                                averageSample=actualSample,
-                                                totalSample=actualSample,
+                                                averageCOP=actualCOP,
+                                                totalCOP=actualCOP,
                                                 averageAmbient=actualAmbient,
                                                 totalAmbient=actualAmbient,
                                                 averageCapacity=actualCapacity,
@@ -34,12 +34,12 @@ class DataHandler(ClassTemplate):
                 new_meas = not new_meas
                 next
             
-            deviation = abs((actualSample/meas.firstSample)-1)
+            deviation = abs((actualCOP/meas.firstSample)-1)
             if deviation <= meas.maxDeviation or meas.firstSample == 0.0:
                 
                 meas.sampleCounter += 1
-                meas.totalSample += actualSample
-                meas.averageSample = meas.totalSample/meas.sampleCounter
+                meas.totalCOP += actualCOP
+                meas.averageCOP = meas.totalCOP/meas.sampleCounter
 
                 meas.totalPower += actualPower
                 meas.averagePower = meas.totalPower/meas.sampleCounter
@@ -52,9 +52,9 @@ class DataHandler(ClassTemplate):
 
             else:
                 meas.sampleCounter = 1
-                meas.firstSample = actualSample
-                meas.totalSample = actualSample
-                meas.averageSample = actualSample
+                meas.firstSample = actualCOP
+                meas.totalCOP = actualCOP
+                meas.averageCOP = actualCOP
 
                 meas.totalPower = actualPower
                 meas.averagePower = actualPower

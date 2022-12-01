@@ -10,8 +10,8 @@ class Measurement():
     sampleCounter: int = 1          # amount of samples in candidate measuremt
     sampleLength: int = 0           # I.e. 10 samples in one meseurement
 
-    averageSample: float = 0.0      # Average of samples in candidate
-    totalSample: float = 0.0        # Sum of all samples in candidate
+    averageCOP: float = 0.0      # Average of samples in candidate
+    totalCOP: float = 0.0        # Sum of all samples in candidate
 
     averagePower: float = 0.0       # Average of power in candidate
     totalPower: float = 0.0         # Sum of all power in candidate
