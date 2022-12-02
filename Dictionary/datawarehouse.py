@@ -21,6 +21,7 @@ class DataStorage(ClassTemplate):
 
         self.Measurements_landscape = None
         self.blank_space = ""
+        self.inclusivity = 'right'
 
     def initStorage(self):                                    
         self.bins_ambient = self.createRange(   self.setup_dict["AmbientRange"][0],
@@ -35,8 +36,6 @@ class DataStorage(ClassTemplate):
         self.Measurements_landscape =[]
 
     def populateMeasLandscape(self):
-        # print("capacity bin", len(self.bins_capacity))
-        # print("Tambient bin", len(self.bins_ambient))
         for i in range(0,len(self.bins_capacity)):                # 1001 (0 tot en met 1000 = 1001 indexen) steps for Capacity
             row = []
             for j in range(0,len(self.bins_ambient)):         # 81 steps for Tambient
@@ -45,10 +44,8 @@ class DataStorage(ClassTemplate):
 
                 lbound_capacity = self.minCapacity + i*self.stepCapacity
                 ubound_capacity = self.minCapacity + (i+1)*self.stepCapacity
-
-                inclusivity = 'right'
                 
-                df_part = self.df.loc[(self.df['averageAmbient'].between(lbound_ambient,ubound_ambient, inclusive=inclusivity)) & (self.df['averageCapacity'].between(lbound_capacity,ubound_capacity, inclusive=inclusivity))]
+                df_part = self.df.loc[(self.df['averageAmbient'].between(lbound_ambient,ubound_ambient, inclusive=self.inclusivity)) & (self.df['averageCapacity'].between(lbound_capacity,ubound_capacity, inclusive=self.inclusivity))]
                 
                 meas_indexs = self.blank_space
                 if not df_part.empty:
@@ -63,7 +60,6 @@ class DataStorage(ClassTemplate):
                 row.append(meas_indexs)
             pass
             self.Measurements_landscape.append(row)
-        # print(self.Measurements_landscape)    
         self.checkLandscape()
         pass
     
@@ -91,68 +87,53 @@ class DataStorage(ClassTemplate):
         for i,a in enumerate(self.Measurements_landscape):          #For each capacity
             for j,b in enumerate(a):                                #For each ambient
                 if not b == self.blank_space:
+                    lbound_ambient = self.minAmbient + j*self.stepAmbient
                     ubound_ambient = self.minAmbient + (j+1)*self.stepAmbient
+                    
+                    lbound_capacity = self.minCapacity + i*self.stepCapacity
                     ubound_capacity = self.minCapacity + (i+1)*self.stepCapacity
                     
                     x.append(ubound_ambient)
                     y.append(ubound_capacity)
 
                     temp=0
+                    sampleDuration = 0
                     for c in b:
-                        # print("i={}, a={}, j={}, b={}, c={}".format(i,a,j,b,c))
                         match proc:
                             case 0:
+                                # Method of counting Measurements per Tambient/Capacity bin
                                 temp+=1
                             case 1:
-                                temp+= (temp + self.df['averageCOP'])/2
+                                # Method of Calculating the Average COP for a Tambient/Capacity bin
+                                data = self.df.loc[c]
+                                temp += data['averageCOP']
+                                pass
+                            case 2:
+                                # Method of Calculating the Average Power for a Tambient/Capacity bin
+                                data = self.df.loc[c]
+                                temp += data['averagePower']
+
+                            case 3:
+                                # Method of Calculating the Energy Consumed by the system for a Tambient/Capacity bin
+                                data = self.df.loc[c]
+                                temp += data['totalPower']
+                                sampleDuration += data['sampleCounter']
+                                pass
+                            case 4:
+                                # Method of Calculating the Energy Produced by the system for a Tambient/Capacity bin
+                                data = self.df.loc[c]
+                                temp += data['totalCapacity']
+                                sampleDuration += data['sampleCounter']
                                 pass
                             case _:
                                 pass
-                        
-
+                    
+                    if proc == 1 or proc == 2:
+                        temp = temp/len(b)
+                    elif proc == 3 or proc == 4:
+                        temp = temp/(3600.0/sampleDuration)
+                        pass
 
                     z.append(temp)
-        
-        # print(len(x),x)
-        # print(len(y),y)
-        # print(len(z),z)
-        # print(sum(z))
-        # print(x,y,z)
-        
-        # exit()
+
         return x,y,z
-
-
-    # def processCOP(self):
-    #     temp=0.0
-    #     matrixCOP=[]
-    #     for x in self.Measurements[0]:           #For each ambient
-    #         for y in x:                     #For each capacity
-    #             for z in y:                 #For each measurement in a specific case    
-    #                 temp+=self.Measurements[x][y][z].averageSample
-
-    #             matrixCOP[x][y]=temp/self.Measurements[x][y].length
-
-    # def processPower(self):
-    #     temp=0.0
-    #     for x in self.Measurements[0]:           #For each ambient
-    #         for y in x:                     #For each capacity
-    #             for z in y:                 #For each measurement in a specific case    
-    #                 temp+=self.easurements[x][y][z].averagePower
-    #             matrixPower[x][y]=temp/self.Measurements[x][y].length
-
-    # def processConsumption(self):
-    #     temp=0.0
-    #     for x in self.Measurements[0]:           #For each ambient
-    #         for y in x:                     #For each capacity
-    #             for z in y:                 #For each measurement in a specific case    
-    #                 temp+=self.Measurements[x][y][z].totalPower #Total consumption during sample duration
-    #             matrixConsumption[x][y]=(temp)/(3600.0/sampleDuration) #Total consumption in a specific case (scaled to kWh)
-
-    # def processProduction(self):
-    #     temp=0.0
-    #     for x in self.Measurements[0]:           #For each ambient
-    #         for y in x:                     #For each capacity
-    #             for z in y:                 #For each measurement in a specific case    
-    #                 temp=self.Measurements[x][y][z].totalCapacity #Total consumption during sample duration
-    #             matrixProduction[x][y]=(temp)/(3600.0/sampleDuration) #Total consumption in a specific case (scaled to kWh)

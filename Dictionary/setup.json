@@ -17,6 +17,7 @@
     "stepCapacity":1000.0,
     "COPRange":[0.0,10.0],
     "stepCOP":0.1,
-    "maxMeasurements":10
+    "maxMeasurements":10,
+    "sampleTime": 1
 }
 }
